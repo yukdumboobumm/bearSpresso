@@ -176,7 +176,7 @@ void setup() {
   // assigns the first address found to insideThermometer
   oneWire.search(insideThermometer);
   tempSensor.setResolution(insideThermometer, 9);
-  tempSensor.setWaitForConversion(true);
+  tempSensor.setWaitForConversion(false);
 
   tempSensor.requestTemperatures();
   tempReadTime = millis();
@@ -325,7 +325,6 @@ void loop() {
           setStatus("CLEAR");
         }
         while (!tempFlag) {
-          statusMsg = "HEATING: " + String(tempC) + char(247) + "C";
           tempSensor.requestTemperatures();
           tempReadTime = millis();
           while (millis() - tempReadTime < 1000) {
@@ -333,6 +332,7 @@ void loop() {
             delay(10);
           }
           tempC = (short) tempSensor.getTempC(insideThermometer);
+          statusMsg = "HEATING: " + String(tempC) + char(247) + "C";
           if (tempC > brewTemp) {
             coolDown();
           }
